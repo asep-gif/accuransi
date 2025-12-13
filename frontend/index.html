@@ -192,7 +192,52 @@
             </div>
 
             <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Products will be loaded here dynamically -->
+                <!-- Product Card 1: HMS -->
+                <div class="product-card group bg-white border border-slate-100 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-700 ease-out opacity-0 transform translate-y-8 hover:shadow-xl hover:-translate-y-2 dark:bg-slate-800 dark:border-slate-700">
+                    <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-3xl mb-5 transition-all duration-300 group-hover:scale-110 dark:bg-orange-500/20">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-2 dark:text-white">Accuransi HMS</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed dark:text-slate-400">An integrated system to manage room bookings, guest services, and hotel operations seamlessly.</p>
+                </div>
+
+                <!-- Product Card 2: Koperasi -->
+                <a href="https://kopkaka.com" target="_blank" rel="noopener noreferrer" class="block product-card group transition-all duration-700 ease-out opacity-0 transform translate-y-8 hover:shadow-xl hover:-translate-y-2" style="animation-delay: 150ms;">
+                    <div class="bg-white border border-slate-100 rounded-2xl p-8 flex flex-col items-center text-center h-full dark:bg-slate-800 dark:border-slate-700">
+                        <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mb-5 transition-all duration-300 group-hover:scale-110 dark:bg-green-500/20">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-slate-800 mb-2 dark:text-white">Accuransi Koperasi</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed dark:text-slate-400">A digital solution for managing savings and loans, membership, and financial reporting for modern cooperatives.</p>
+                    </div>
+                </a>
+
+                <!-- Product Card 3: Absensi -->
+                <div class="product-card group bg-white border border-slate-100 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-700 ease-out opacity-0 transform translate-y-8 hover:shadow-xl hover:-translate-y-2 dark:bg-slate-800 dark:border-slate-700" style="animation-delay: 300ms;">
+                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-3xl mb-5 transition-all duration-300 group-hover:scale-110 dark:bg-purple-500/20">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-2 dark:text-white">Accuransi Absensi</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed dark:text-slate-400">An online attendance application with face recognition and GPS to accurately monitor employee attendance.</p>
+                </div>
+
+                <!-- Product Card 4: Reporting Dashboard -->
+                <div class="product-card group bg-white border border-slate-100 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-700 ease-out opacity-0 transform translate-y-8 hover:shadow-xl hover:-translate-y-2 dark:bg-slate-800 dark:border-slate-700" style="animation-delay: 450ms;">
+                    <div class="w-16 h-16 bg-blue-100 text-primary rounded-full flex items-center justify-center text-3xl mb-5 transition-all duration-300 group-hover:scale-110 dark:bg-primary/20">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-2 dark:text-white">Accuransi Reporting Dashboard</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed dark:text-slate-400">A powerful dashboard for data visualization and business intelligence to monitor your performance in real-time.</p>
+                </div>
+
+                <!-- Product Card 5: Journal -->
+                <div class="product-card group bg-white border border-slate-100 rounded-2xl p-8 flex flex-col items-center text-center transition-all duration-700 ease-out opacity-0 transform translate-y-8 hover:shadow-xl hover:-translate-y-2 dark:bg-slate-800 dark:border-slate-700" style="animation-delay: 600ms;">
+                    <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-3xl mb-5 transition-all duration-300 group-hover:scale-110 dark:bg-red-500/20">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-2 dark:text-white">Accuransi Journal</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed dark:text-slate-400">A comprehensive accounting and financial journaling application to track transactions and generate reports.</p>
+                </div>
                 
                 <!-- Coming Soon -->
                 <div class="product-card group border-2 border-dashed border-slate-300 rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all duration-700 ease-out opacity-0 transform translate-y-8 hover:border-primary hover:bg-blue-50/50 dark:border-slate-700 dark:hover:border-primary dark:hover:bg-slate-800/50">
@@ -235,20 +280,6 @@
         </div>
     </section>
 
-    <!-- Clients Section -->
-    <section id="clients" class="py-20 bg-white dark:bg-slate-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 section-title-anim opacity-0 transform translate-y-8 transition-all duration-1000 ease-out">
-                <h2 class="text-primary font-bold tracking-wide uppercase text-sm mb-2 dark:text-indigo-400">Our Partners</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Trusted by Leading Companies</h3>
-                <div class="w-20 h-1.5 bg-gradient-to-r from-primary to-secondary mx-auto mt-4 rounded-full"></div>
-            </div>
-            <div id="clients-logo-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12 items-center">
-                <!-- Partner logos will be loaded here dynamically -->
-            </div>
-        </div>
-    </section>
-
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-20 bg-blue-50 dark:bg-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -261,7 +292,33 @@
             <!-- Swiper Slider -->
             <div class="swiper testimonial-slider max-w-3xl mx-auto">
                 <div class="swiper-wrapper">
-                    <!-- Testimonials will be loaded here dynamically -->
+                    <!-- Testimonial Slide 1 -->
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-xl p-8 shadow-lg border border-slate-100 text-center dark:bg-slate-800 dark:border-slate-700">
+                            <img src="https://i.pravatar.cc/100?u=john" alt="John Doe" class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-blue-100 dark:border-primary/30">
+                            <p class="text-slate-600 italic mb-6 dark:text-slate-400">"The system from Accuransi has greatly helped our hospital operations. The implementation was fast and the support team is very responsive."</p>
+                            <div class="font-bold text-slate-800 dark:text-white">John Doe</div>
+                            <div class="text-sm text-slate-400">IT Manager, Sehat Selalu Hospital</div>
+                        </div>
+                    </div>
+                    <!-- Testimonial Slide 2 -->
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-xl p-8 shadow-lg border border-slate-100 text-center dark:bg-slate-800 dark:border-slate-700">
+                            <img src="https://i.pravatar.cc/100?u=jane" alt="Jane Smith" class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-blue-100 dark:border-primary/30">
+                            <p class="text-slate-600 italic mb-6 dark:text-slate-400">"The cooperative application they developed has truly changed the way we work. Everything has become more transparent and efficient."</p>
+                            <div class="font-bold text-slate-800 dark:text-white">Jane Smith</div>
+                            <div class="text-sm text-slate-400">Chairman, Maju Bersama Cooperative</div>
+                        </div>
+                    </div>
+                    <!-- Testimonial Slide 3 -->
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-xl p-8 shadow-lg border border-slate-100 text-center dark:bg-slate-800 dark:border-slate-700">
+                            <img src="https://i.pravatar.cc/100?u=budi" alt="Budi Santoso" class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-blue-100 dark:border-primary/30">
+                            <p class="text-slate-600 italic mb-6 dark:text-slate-400">"With Accuransi Attendance, monitoring employee attendance at various project locations has become very easy and accurate. Highly recommended!"</p>
+                            <div class="font-bold text-slate-800 dark:text-white">Budi Santoso</div>
+                            <div class="text-sm text-slate-400">HRD, Konstruksi Jaya Corp.</div>
+                        </div>
+                    </div>
                 </div>
                 <!-- Add Pagination -->
                 <div class="swiper-pagination mt-8"></div>
@@ -338,9 +395,11 @@
                 <div>
                     <h4 class="font-bold text-slate-900 mb-4 dark:text-white">Products</h4>
                     <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-                        <li><a href="#" class="hover:text-primary transition dark:hover:text-indigo-400">Accuransi HMS</a></li>
+                        <li><a href="#" class="hover:text-primary transition dark:hover:text-indigo-400">Hotel Management System</a></li>
                         <li><a href="#" class="hover:text-primary transition dark:hover:text-indigo-400">Accuransi Koperasi</a></li>
                         <li><a href="#" class="hover:text-primary transition dark:hover:text-indigo-400">Accuransi Absensi</a></li>
+                        <li><a href="#" class="hover:text-primary transition dark:hover:text-indigo-400">Accuransi Reporting</a></li>
+                        <li><a href="#" class="hover:text-primary transition dark:hover:text-indigo-400">Accuransi Journal</a></li>
                     </ul>
                 </div>
                 <div>
@@ -348,7 +407,7 @@
                     <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
                         <li><i class="fas fa-envelope w-5"></i> asep@accuransi.com</li>
                         <li><i class="fas fa-phone w-5"></i> +62 851-2100-3580</li>
-                        <li><i class="fas fa-map-marker-alt w-5"></i> Kab. Bandung Barat, Indonesia</li>
+                        <li><i class="fas fa-map-marker-alt w-5"></i> West Bandung Regency, Indonesia</li>
                     </ul>
                 </div>
             </div>

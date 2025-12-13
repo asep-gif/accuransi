@@ -51,125 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 200 + (index * 150)); // Start after 200ms, with 150ms between elements
     });
 
-    // --- Dynamic Content Loading ---
-    async function loadPartners() {
-        const grid = document.getElementById('clients-logo-grid');
-        if (!grid) return;
-
-        try {
-            const response = await fetch('http://localhost:3000/api/partners');
-            if (!response.ok) throw new Error('Failed to fetch partners');
-            
-            const partners = await response.json();
-            
-            partners.forEach(partner => {
-                const logoDiv = document.createElement('div');
-                logoDiv.className = 'client-logo opacity-0 transform translate-y-8 transition-all duration-700 ease-out';
-                logoDiv.innerHTML = `<img src="${partner.logo_url}" alt="${partner.name}" class="h-10 mx-auto grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition">`;
-                grid.appendChild(logoDiv);
-            });
-        } catch (error) {
-            console.error('Error loading partners:', error);
-            grid.innerHTML = `<p class="col-span-full text-center text-slate-500">Could not load partner logos.</p>`;
-        }
-    }
-
-    async function loadProducts() {
-        const grid = document.getElementById('products-grid');
-        if (!grid) return;
-
-        const themeClasses = {
-            blue: { bg: 'bg-blue-100', text: 'text-primary' },
-            purple: { bg: 'bg-purple-100', text: 'text-purple-600' },
-            orange: { bg: 'bg-orange-100', text: 'text-orange-500' },
-            green: { bg: 'bg-green-100', text: 'text-green-600' },
-        };
-
-        try {
-            const response = await fetch('http://localhost:3000/api/products');
-            if (!response.ok) throw new Error('Failed to fetch products');
-            
-            const products = await response.json();
-            
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card group transition-all duration-700 ease-out opacity-0 transform translate-y-8';
-
-                if (product.is_featured) {
-                    card.classList.add('bg-gradient-to-br', 'from-blue-600', 'to-blue-700', 'rounded-2xl', 'p-8', 'shadow-xl', 'text-white', 'transform', 'md:-translate-y-2');
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start">
-                            <div class="w-14 h-14 bg-white/20 backdrop-blur-sm text-white rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-                                <i class="${product.icon_class}"></i>
-                            </div>
-                            ${product.badge_text ? `<span class="bg-white text-blue-700 text-xs font-bold px-2 py-1 rounded">${product.badge_text}</span>` : ''}
-                        </div>
-                        <h4 class="text-xl font-bold mb-3">${product.name}</h4>
-                        <p class="text-blue-100 mb-6 text-sm leading-relaxed">${product.description}</p>
-                        ${product.live_url ? `<a href="${product.live_url}" target="_blank" class="inline-flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-50 transition">View Live Demo <i class="fas fa-external-link-alt"></i></a>` : ''}
-                    `;
-                } else {
-                    const theme = themeClasses[product.theme] || themeClasses.blue;
-                    card.classList.add('bg-slate-50', 'rounded-2xl', 'p-8', 'hover:bg-white', 'hover:shadow-xl', 'border', 'border-transparent', 'hover:border-blue-100');
-                    card.innerHTML = `
-                        <div class="w-14 h-14 ${theme.bg} ${theme.text} rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-                            <i class="${product.icon_class}"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">${product.name}</h4>
-                        <p class="text-slate-500 mb-4 text-sm leading-relaxed">${product.description}</p>
-                    `;
-
-                    if (product.category) {
-                        const categoryEl = product.category_url
-                            ? `<a href="${product.category_url}" target="_blank" class="${theme.text} font-semibold text-sm flex items-center hover:underline">${product.category} <i class="fas fa-external-link-alt text-xs ml-1.5"></i></a>`
-                            : `<span class="${theme.text} font-semibold text-sm flex items-center">${product.category}</span>`;
-                        card.innerHTML += categoryEl;
-                    }
-                }
-                grid.prepend(card);
-            });
-        } catch (error) {
-            console.error('Error loading products:', error);
-            grid.innerHTML = `<p class="col-span-full text-center text-slate-500">Could not load products.</p>`;
-        }
-    }
-
-    async function loadTestimonials() {
-        const wrapper = document.querySelector('.testimonial-slider .swiper-wrapper');
-        if (!wrapper) return;
-
-        try {
-            const response = await fetch('http://localhost:3000/api/testimonials');
-            if (!response.ok) throw new Error('Failed to fetch testimonials');
-            const testimonials = await response.json();
-
-            if (testimonials.length === 0) {
-                wrapper.innerHTML = `<p class="text-center w-full">No testimonials available at the moment.</p>`;
-                return;
-            }
-
-            testimonials.forEach(testimonial => {
-                const slide = document.createElement('div');
-                slide.className = 'swiper-slide text-center';
-                slide.innerHTML = `
-                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
-                        <i class="fas fa-quote-left text-primary text-3xl mb-4"></i>
-                        <p class="text-slate-600 italic mb-6">"${testimonial.quote}"</p>
-                        <img src="${testimonial.image_url}" alt="${testimonial.client_name}" class="w-16 h-16 rounded-full mx-auto mb-2 border-2 border-primary p-1 object-cover">
-                        <h4 class="font-bold text-slate-800">${testimonial.client_name}</h4>
-                        <p class="text-sm text-slate-400">${testimonial.client_title}</p>
-                    </div>
-                `;
-                wrapper.appendChild(slide);
-            });
-        } catch (error) {
-            console.error('Error loading testimonials:', error);
-            wrapper.innerHTML = `<p class="text-center w-full text-slate-500">Could not load testimonials.</p>`;
-        }
-    }
-
-    // Load dynamic content and then set up animations
-    Promise.all([loadPartners(), loadProducts(), loadTestimonials()]).then(() => {
     // --- Scroll Animation Logic ---
     const animationObserverOptions = {
         root: null,
@@ -180,11 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const animationObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                // Use a data attribute for delay if it exists, otherwise use index
-                const delay = entry.target.dataset.delay ? parseInt(entry.target.dataset.delay) : index * 150;
+                // Use inline style for delay if it exists, otherwise use a default
+                const delay = entry.target.style.animationDelay ? parseInt(entry.target.style.animationDelay) : 0;
 
                 setTimeout(() => {
-                    entry.target.classList.remove('opacity-0', 'translate-y-8', '-translate-x-8', 'translate-x-8');
+                    entry.target.classList.remove('opacity-0', 'translate-y-8', '-translate-x-8', 'translate-x-8', 'translate-y-4');
                 }, delay);
 
                 observer.unobserve(entry.target);
@@ -201,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sectionTitles.forEach(title => animationObserver.observe(title));
 
     // Observe Client Logos
-    const clientLogos = document.querySelectorAll('.client-logo');
+    const clientLogos = document.querySelectorAll('.client-logo-anim');
     clientLogos.forEach(logo => animationObserver.observe(logo));
 
     // Observe About Section Elements
@@ -211,10 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const aboutRight = document.querySelector('.about-anim-right');
     if (aboutRight) {
-        aboutRight.dataset.delay = 200; // Add a slight delay to the right side
+        aboutRight.style.animationDelay = '200ms'; // Add a slight delay to the right side
         animationObserver.observe(aboutRight);
     }
-    });
 
     // --- Testimonial Slider Initialization ---
     const swiper = new Swiper('.testimonial-slider', {

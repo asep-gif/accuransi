@@ -8,17 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn && menu) {
         btn.addEventListener('click', () => {
             // Toggle visibility and animation classes
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                setTimeout(() => { // Allow display property to apply before transitioning
-                    menu.classList.remove('opacity-0', '-translate-y-4');
-                }, 10);
-            } else {
-                menu.classList.add('opacity-0', '-translate-y-4');
-                setTimeout(() => { // Wait for transition to finish before hiding
-                    menu.classList.add('hidden');
-                }, 300);
-            }
+            menu.classList.toggle('hidden');
+            // The opacity and transform are now handled by Tailwind's peer-checked state or similar,
+            // or simply by adding/removing classes that have transitions.
+            // For simplicity, we can just toggle the final state classes.
+            menu.classList.toggle('opacity-0');
+            menu.classList.toggle('-translate-y-4');
         });
 
         // Close menu when a link is clicked

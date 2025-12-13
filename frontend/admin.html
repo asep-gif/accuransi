@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accuransi - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1', // Indigo 500
+                        secondary: '#9333ea', // Purple 600
+                        dark: '#0f172a',
+                        light: '#f8fafc', // Lighter gray for admin bg
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-light font-sans dark:bg-slate-900">
+
+    <!-- Login Section -->
+    <div id="login-section" class="flex items-center justify-center min-h-screen bg-slate-100 dark:bg-dark">
+        <div class="w-full max-w-sm p-8 space-y-6 bg-white rounded-xl shadow-lg dark:bg-slate-800">
+            <div class="flex justify-center">
+                 <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center text-white font-bold text-2xl shadow-lg">A</div>
+            </div>
+            <h2 class="text-2xl font-bold text-center text-dark dark:text-white">Accuransi</h2>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="username" class="text-sm font-medium text-slate-600 sr-only">Username</label>
+                    <input id="username" name="username" type="text" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Username">
+                </div>
+                <div>
+                    <label for="password" class="text-sm font-medium text-slate-600 sr-only">Password</label>
+                    <input id="password" name="password" type="password" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white" placeholder="Password">
+                </div>
+                <p id="login-error" class="text-sm text-red-500 h-5"></p>
+                <button type="submit" class="w-full px-4 py-2 font-bold text-white bg-primary rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition dark:focus:ring-offset-slate-800">Sign in</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="flex min-h-screen hidden">
+        <!-- Sidebar -->
+        <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-dark text-white flex-col transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex">
+            <div class="p-6 flex items-center gap-3 border-b border-slate-700">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center font-bold text-xl flex-shrink-0">A</div>
+                <span class="font-bold text-xl tracking-tight">Accuransi</span>
+            </div>
+            <nav id="sidebar-nav" class="flex-1 p-4 space-y-2">
+                <a href="#" data-target="partners-section" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg bg-slate-700 text-white transition">
+                    <i class="fas fa-users w-5"></i>
+                    <span>Partners</span>
+                </a>
+                <a href="#" data-target="products-section" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition">
+                    <i class="fas fa-box-open w-5"></i>
+                    <span>Products</span>
+                </a>
+                <a href="#" data-target="testimonials-section" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition">
+                    <i class="fas fa-comment-dots w-5"></i>
+                    <span>Testimonials</span>
+                </a>
+                <a href="#" data-target="users-section" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition">
+                    <i class="fas fa-user-shield w-5"></i>
+                    <span>Users</span>
+                </a>
+                <a href="/" target="_blank" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-700 hover:text-white transition mt-8">
+                    <i class="fas fa-external-link-alt w-5"></i>
+                    <span>View Live Site</span>
+                </a>
+                <a href="#" id="logout-btn" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-red-500/20 hover:text-red-400 transition mt-auto">
+                    <i class="fas fa-sign-out-alt w-5"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top bar for mobile -->
+            <header class="md:hidden sticky top-0 bg-white shadow-md z-20 dark:bg-slate-800 dark:border-b dark:border-slate-700">
+                <div class="p-4 flex items-center">
+                    <button id="admin-mobile-menu-btn" class="text-slate-600 hover:text-primary focus:outline-none dark:text-slate-300">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <span class="font-bold text-lg text-slate-800 ml-4 dark:text-white">Admin Menu</span>
+                </div>
+            </header>
+
+            <!-- Overlay for mobile sidebar -->
+            <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden dark:bg-opacity-70"></div>
+
+            <!-- Partners Section -->
+            <main id="partners-section" class="content-section p-8">
+                <h1 class="text-3xl font-bold text-dark mb-8 dark:text-white">Manage Partners</h1>
+
+                <!-- Add New Partner Form -->
+                <div class="bg-white p-6 rounded-xl shadow-md mb-8 dark:bg-slate-800">
+                    <h2 class="text-xl font-semibold text-dark mb-4 dark:text-white">Add New Partner</h2>
+                    <form id="add-partner-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label for="partner-name" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Partner Name</label>
+                            <input type="text" id="partner-name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="partner-logo" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Logo URL</label>
+                            <input type="url" id="partner-logo" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        </div>
+                        <button type="submit" class="bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-secondary transition h-10">Add Partner</button>
+                    </form>
+                    <p id="partner-form-message" class="text-sm mt-2 h-5 text-green-600 dark:text-green-500"></p>
+                </div>
+
+                <!-- Partners Table -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden dark:bg-slate-800">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b border-slate-200 dark:bg-slate-700 dark:border-slate-600">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Logo</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Name</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 text-right dark:text-slate-300">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partners-table-body">
+                            <!-- Rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+
+            <!-- Products Section (hidden by default) -->
+            <main id="products-section" class="content-section p-8 hidden">
+                <h1 class="text-3xl font-bold text-dark mb-8 dark:text-white">Manage Products</h1>
+
+                <!-- Add New Product Form -->
+                <div class="bg-white p-6 rounded-xl shadow-md mb-8 dark:bg-slate-800">
+                    <h2 class="text-xl font-semibold text-dark mb-4 dark:text-white">Add New Product</h2>
+                    <form id="add-product-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="product-name" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Product Name</label>
+                                <input type="text" id="product-name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="product-icon" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Font Awesome Icon Class</label>
+                                <input type="text" id="product-icon" placeholder="e.g., fas fa-hospital-user" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="product-description" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Description</label>
+                            <textarea id="product-description" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="product-category" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Category Name</label>
+                                <input type="text" id="product-category" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="product-category-url" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Category URL (Optional)</label>
+                                <input type="url" id="product-category-url" placeholder="https://example.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="product-theme" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Theme</label>
+                                <select id="product-theme" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                                    <option value="blue">Blue</option>
+                                    <option value="purple">Purple</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="green">Green</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="product-order" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Display Order</label>
+                                <input type="number" id="product-order" value="0" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <label class="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                <input type="checkbox" id="product-featured" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary">
+                                <span>Mark as Featured</span>
+                            </label>
+                            <button type="submit" class="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-secondary transition">Add Product</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Products Table -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden dark:bg-slate-800">
+                    <table class="w-full text-left">
+                        <thead class="hidden md:table-header-group bg-slate-50 border-b border-slate-200 dark:bg-slate-700 dark:border-slate-600">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Order</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Product</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Description</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Category</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Featured</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 text-right dark:text-slate-300">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body">
+                            <!-- Rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+
+            <!-- Testimonials Section (hidden by default) -->
+            <main id="testimonials-section" class="content-section p-8 hidden">
+                <h1 class="text-3xl font-bold text-dark mb-8 dark:text-white">Manage Testimonials</h1>
+
+                <!-- Add New Testimonial Form -->
+                <div class="bg-white p-6 rounded-xl shadow-md mb-8 dark:bg-slate-800">
+                    <h2 class="text-xl font-semibold text-dark mb-4 dark:text-white">Add New Testimonial</h2>
+                    <form id="add-testimonial-form" class="space-y-4">
+                        <div>
+                            <label for="testimonial-quote" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Quote</label>
+                            <textarea id="testimonial-quote" rows="3" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="testimonial-client-name" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Client Name</label>
+                                <input type="text" id="testimonial-client-name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="testimonial-client-title" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Client Title</label>
+                                <input type="text" id="testimonial-client-title" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="testimonial-image-url" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Image URL</label>
+                                <input type="url" id="testimonial-image-url" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label for="testimonial-order" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Display Order</label>
+                                <input type="number" id="testimonial-order" value="0" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-secondary transition">Add Testimonial</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Testimonials Table -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden dark:bg-slate-800">
+                    <table class="w-full text-left">
+                        <thead class="hidden md:table-header-group bg-slate-50 border-b border-slate-200 dark:bg-slate-700 dark:border-slate-600">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Client</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Quote</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 text-right dark:text-slate-300">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="testimonials-table-body"></tbody>
+                    </table>
+                </div>
+            </main>
+
+            <!-- Users Section (hidden by default) -->
+            <main id="users-section" class="content-section p-8 hidden">
+                <h1 class="text-3xl font-bold text-dark mb-8 dark:text-white">Manage Users</h1>
+
+                <!-- Add New User Form -->
+                <div class="bg-white p-6 rounded-xl shadow-md mb-8 dark:bg-slate-800">
+                    <h2 class="text-xl font-semibold text-dark mb-4 dark:text-white">Add New User</h2>
+                    <form id="add-user-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                            <label for="user-username" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Username</label>
+                            <input type="text" id="user-username" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="user-password" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Password</label>
+                            <input type="password" id="user-password" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        </div>
+                        <button type="submit" class="bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-secondary transition h-10">Add User</button>
+                    </form>
+                    <p id="user-form-message" class="text-sm mt-2 h-5 text-green-600 dark:text-green-500"></p>
+                </div>
+
+                <!-- Users Table -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden dark:bg-slate-800">
+                    <table class="w-full text-left">
+                        <thead class="hidden md:table-header-group bg-slate-50 border-b border-slate-200 dark:bg-slate-700 dark:border-slate-600">
+                            <tr>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">ID</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Username</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Role</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 dark:text-slate-300">Created At</th>
+                                <th class="p-4 text-sm font-semibold text-slate-600 text-right dark:text-slate-300">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden dark:bg-opacity-70">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md dark:bg-slate-800">
+            <h2 class="text-xl font-semibold text-dark mb-4 dark:text-white">Edit Partner</h2>
+            <form id="edit-partner-form">
+                <input type="hidden" id="edit-partner-id">
+                <div class="mb-4">
+                    <label for="edit-partner-name" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Partner Name</label>
+                    <input type="text" id="edit-partner-name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                </div>
+                <div class="mb-6">
+                    <label for="edit-partner-logo" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Logo URL</label>
+                    <input type="url" id="edit-partner-logo" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancel-edit-btn" class="bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-lg hover:bg-slate-300 transition">Cancel</button>
+                    <button type="submit" class="bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-secondary transition">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="edit-product-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden dark:bg-opacity-70">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg dark:bg-slate-800">
+            <h2 class="text-xl font-semibold text-dark mb-6 dark:text-white">Edit Product</h2>
+            <form id="edit-product-form" class="space-y-4">
+                <input type="hidden" id="edit-product-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-product-name" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Product Name</label>
+                        <input type="text" id="edit-product-name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="edit-product-icon" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Font Awesome Icon Class</label>
+                        <input type="text" id="edit-product-icon" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                </div>
+                <div>
+                    <label for="edit-product-description" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Description</label>
+                    <textarea id="edit-product-description" rows="3" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white"></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="edit-product-category" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Category Name</label>
+                        <input type="text" id="edit-product-category" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="edit-product-category-url" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Category URL (Optional)</label>
+                        <input type="url" id="edit-product-category-url" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="edit-product-theme" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Theme</label>
+                        <select id="edit-product-theme" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white"></select>
+                    </div>
+                    <div>
+                        <label for="edit-product-order" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Display Order</label>
+                        <input type="number" id="edit-product-order" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                </div>
+                <div class="pt-2">
+                    <label class="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                        <input type="checkbox" id="edit-product-featured" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary">
+                        <span>Mark as Featured</span>
+                    </label>
+                </div>
+                <div class="flex justify-end gap-4 pt-4">
+                    <button type="button" id="cancel-edit-product-btn" class="bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-lg hover:bg-slate-300 transition">Cancel</button>
+                    <button type="submit" class="bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-secondary transition">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Testimonial Modal -->
+    <div id="edit-testimonial-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden dark:bg-opacity-70">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg dark:bg-slate-800">
+            <h2 class="text-xl font-semibold text-dark mb-6 dark:text-white">Edit Testimonial</h2>
+            <form id="edit-testimonial-form" class="space-y-4">
+                <input type="hidden" id="edit-testimonial-id">
+                <div>
+                    <label for="edit-testimonial-quote" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Quote</label>
+                    <textarea id="edit-testimonial-quote" rows="3" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white"></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-testimonial-client-name" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Client Name</label>
+                        <input type="text" id="edit-testimonial-client-name" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="edit-testimonial-client-title" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Client Title</label>
+                        <input type="text" id="edit-testimonial-client-title" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-testimonial-image-url" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Image URL</label>
+                        <input type="url" id="edit-testimonial-image-url" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="edit-testimonial-order" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Display Order</label>
+                        <input type="number" id="edit-testimonial-order" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-4 pt-4">
+                    <button type="button" id="cancel-edit-testimonial-btn" class="bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-lg hover:bg-slate-300 transition">Cancel</button>
+                    <button type="submit" class="bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-secondary transition">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="edit-user-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden dark:bg-opacity-70">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md dark:bg-slate-800">
+            <h2 class="text-xl font-semibold text-dark mb-4 dark:text-white">Edit User</h2>
+            <form id="edit-user-form">
+                <input type="hidden" id="edit-user-id">
+                <div class="mb-4">
+                    <label for="edit-user-username" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">Username</label>
+                    <input type="text" id="edit-user-username" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                </div>
+                <div class="mb-6">
+                    <label for="edit-user-password" class="block text-sm font-medium text-slate-600 mb-1 dark:text-slate-300">New Password (optional)</label>
+                    <input type="password" id="edit-user-password" placeholder="Leave blank to keep current password" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancel-edit-user-btn" class="bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-lg hover:bg-slate-300 transition">Cancel</button>
+                    <button type="submit" class="bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-secondary transition">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginSection = document.getElementById('login-section');
+
+        // Dark Mode Logic
+        const htmlElement = document.documentElement;
+        // Check localStorage on initial load
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+        // The main site's script.js will handle the toggle button,
+        // but we ensure the class is set correctly on the admin page load.
+
+
+        // Admin Panel Logic
+        const adminPanel = document.getElementById('admin-panel');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // This function will be defined in admin.js and we'll call it from here.
+        // We'll attach it to the window object to make it accessible.
+        let initializeAdminPanel = () => {};
+
+        const API_URL = 'http://localhost:3000'; // Your backend URL
+
+        const showAdminPanel = () => {
+            loginSection.classList.add('hidden');
+            adminPanel.classList.remove('hidden');
+            if (typeof initializeAdminPanel === 'function') initializeAdminPanel();
+        };
+
+        const showLogin = () => {
+            loginSection.classList.remove('hidden');
+            adminPanel.classList.add('hidden');
+            localStorage.removeItem('authToken'); // Clean up any invalid token
+        };
+
+        // Check if a token exists in localStorage
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            // Verify the token with the backend before showing the admin panel
+            fetch(`${API_URL}/api/verify-token`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(response => {
+                if (response.ok) {
+                    showAdminPanel();
+                } else {
+                    // Token is invalid or expired
+                    showLogin();
+                }
+            })
+            .catch(() => {
+                // Network error or server is down
+                showLogin();
+            });
+        } else {
+            showLogin(); // Ensure login is shown if no token
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginError.textContent = '';
+            const username = e.target.username.value;
+            const password = e.target.password.value;
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                if (!response.ok) throw new Error('Invalid username or password.');
+
+                const { token } = await response.json();
+                localStorage.setItem('authToken', token); // Store the token
+                showAdminPanel();
+            } catch (error) {
+                loginError.textContent = error.message;
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            window.location.reload();
+        });
+    });
+    </script>
+    <script src="admin.js"></script>
+</body>
+</html>

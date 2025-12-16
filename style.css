@@ -1,0 +1,28 @@
+/* Custom Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Swiper Customization */
+.swiper-pagination-bullet-active {
+    background-color: #0ea5e9 !important; /* Tailwind 'primary' color */
+    transform: scale(1.2);
+}
+
+/* FAQ Accordion Icon Rotation */
+.faq-question.open i {
+    transform: rotate(180deg);
+}

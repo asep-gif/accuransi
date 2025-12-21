@@ -74,12 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
             about_feature3: "Reliable Support",
             testimonials_tagline: "Testimonials",
             testimonials_title: "What Our Clients Say",
-            testimonial1_quote: '"The system from Accuransi has greatly helped our hospital operations. The implementation was fast and the support team is very responsive."',
-            testimonial1_role: "IT Manager, Sehat Selalu Hospital",
+            testimonial1_quote: '"The system from Accuransi has greatly helped our hospitality operations. The implementation was fast and the support team is very responsive."',
+            testimonial1_role: "head it and digital marketing, KAGUM Hotels",
             testimonial2_quote: '"The cooperative application they developed has truly changed the way we work. Everything has become more transparent and efficient."',
-            testimonial2_role: "Chairman, Maju Bersama Cooperative",
-            testimonial3_quote: '"With Accuransi Attendance, monitoring employee attendance at various project locations has become very easy and accurate. Highly recommended!"',
-            testimonial3_role: "HRD, Konstruksi Jaya Corp.",
+            testimonial2_role: "Chairman, Koperasi Karya Kagum Abadi",
             faq_tagline: "FAQ",
             faq_title: "Frequently Asked Questions",
             faq1_question: "What technologies do you use?",
@@ -123,12 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
             about_feature3: "Dukungan yang Andal",
             testimonials_tagline: "Testimoni",
             testimonials_title: "Apa Kata Klien Kami",
-            testimonial1_quote: '"Sistem dari Accuransi sangat membantu operasional rumah sakit kami. Implementasinya cepat dan tim pendukungnya sangat responsif."',
-            testimonial1_role: "Manajer TI, RS Sehat Selalu",
+            testimonial1_quote: '"Sistem dari Accuransi sangat membantu operasional perhotelan kami. Implementasinya cepat dan tim pendukungnya sangat responsif."',
+            testimonial1_role: "Kepala IT dan Pemasaran Digital, KAGUM Hotels",
             testimonial2_quote: '"Aplikasi koperasi yang mereka kembangkan benar-benar mengubah cara kami bekerja. Semuanya menjadi lebih transparan dan efisien."',
-            testimonial2_role: "Ketua, Koperasi Maju Bersama",
-            testimonial3_quote: '"Dengan Absensi Accuransi, memantau kehadiran karyawan di berbagai lokasi proyek menjadi sangat mudah dan akurat. Sangat direkomendasikan!"',
-            testimonial3_role: "HRD, PT Konstruksi Jaya",
+            testimonial2_role: "Ketua, Koperasi Karya Kagum Abadi",
             faq_tagline: "FAQ",
             faq_title: "Pertanyaan yang Sering Diajukan",
             faq1_question: "Teknologi apa yang Anda gunakan?",
@@ -249,10 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Observe Section Titles
     const sectionTitles = document.querySelectorAll('.section-title-anim');
     sectionTitles.forEach(title => animationObserver.observe(title));
-
-    // Observe Client Logos
-    const clientLogos = document.querySelectorAll('.client-logo-anim');
-    clientLogos.forEach(logo => animationObserver.observe(logo));
 
     // Observe About Section Elements
     const aboutLeft = document.querySelector('.about-anim-left');

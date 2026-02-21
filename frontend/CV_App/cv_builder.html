@@ -38,13 +38,18 @@
                     <button onclick="toggleLanguage()" class="px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-md transition border border-gray-200">
                         <i class="fas fa-globe mr-1"></i> <span id="lang-label">ID</span>
                     </button>
-                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-medium transition shadow-sm flex items-center gap-2">
+                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-medium transition shadow-sm hidden md:flex items-center gap-2">
                         <i class="fas fa-download"></i> <span data-lang="print">Download PDF</span>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Download FAB -->
+    <button onclick="window.print()" class="md:hidden fixed bottom-20 right-4 bg-blue-600 hover:bg-blue-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center z-30 no-print">
+        <i class="fas fa-download text-xl"></i>
+    </button>
 
     <!-- Main Workspace -->
     <div class="flex flex-1 overflow-hidden relative">

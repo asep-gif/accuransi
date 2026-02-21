@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileDarkModeToggle.addEventListener('click', toggleTheme);
 
         // Apply theme on initial load
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const savedTheme = localStorage.getItem('theme') || 'light';
         applyTheme(savedTheme);
     }
 
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Apply language on initial load
-    const savedLang = localStorage.getItem('language') || 'id'; // Default to Indonesian
+    const savedLang = localStorage.getItem('language') || 'en'; // Default to English
     setLanguage(savedLang);
 
     // Mobile Menu Toggle
@@ -246,16 +246,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const sectionTitles = document.querySelectorAll('.section-title-anim');
     sectionTitles.forEach(title => animationObserver.observe(title));
 
-    // Observe About Section Elements
-    const aboutLeft = document.querySelector('.about-anim-left');
-    if (aboutLeft) {
-        animationObserver.observe(aboutLeft);
-    }
-    const aboutRight = document.querySelector('.about-anim-right');
-    if (aboutRight) {
-        aboutRight.style.animationDelay = '200ms'; // Add a slight delay to the right side
-        animationObserver.observe(aboutRight);
-    }
+    // Observe side-in animation elements (used by CV Builder and About sections)
+    const animLeftElements = document.querySelectorAll('.about-anim-left');
+    animLeftElements.forEach(el => animationObserver.observe(el));
+
+    const animRightElements = document.querySelectorAll('.about-anim-right');
+    animRightElements.forEach(el => {
+        el.style.animationDelay = '200ms'; // Add a slight delay to all right-side elements
+        animationObserver.observe(el);
+    });
 
     // --- Testimonial Slider Initialization ---
     const swiper = new Swiper('.testimonial-slider', {

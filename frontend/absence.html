@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Accuransi Absence App — aplikasi absensi karyawan berbasis SaaS dengan check-in geofenced, verifikasi selfie, jadwal shift, cuti, lembur, dan laporan kehadiran.">
+<link rel="icon" type="image/png" href="logo/logo.png">
+<title>Accuransi Absence App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html{color-scheme:light dark}
+  body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+  :root{
+    --ink:#0B1F3A;
+    --ink-soft:#40506B;
+    --muted:#63748D;
+    --line:#DCE5F0;
+    --paper:#F1F5FA;
+    --surface:#FFFFFF;
+    --surface-2:#F7FAFD;
+    --azure:#1877D8;
+    --azure-bright:#2BA6FF;
+    --brand-deep:#0B4C9E;
+    --ok:#1B9E6B;
+    --warn:#C67E22;
+    --crit:#CE4F44;
+    --ring:rgba(24,119,216,.38);
+    --shadow:0 1px 2px rgba(11,31,58,.06), 0 10px 30px -12px rgba(11,31,58,.16);
+    --shadow-sm:0 1px 2px rgba(11,31,58,.08);
+    --radius:16px;
+    font-family:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ink:#E7EEF8;
+      --ink-soft:#B4C2D6;
+      --muted:#8496AE;
+      --line:#22374F;
+      --paper:#0A1626;
+      --surface:#102135;
+      --surface-2:#0C1B2C;
+      --azure:#3B9BF0;
+      --azure-bright:#57B4FF;
+      --brand-deep:#2C7FD6;
+      --ok:#3BC489;
+      --warn:#E0A24C;
+      --crit:#E56B60;
+      --ring:rgba(59,155,240,.34);
+      --shadow:0 1px 2px rgba(0,0,0,.35), 0 14px 40px -14px rgba(0,0,0,.55);
+      --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#E7EEF8;
+    --ink-soft:#B4C2D6;
+    --muted:#8496AE;
+    --line:#22374F;
+    --paper:#0A1626;
+    --surface:#102135;
+    --surface-2:#0C1B2C;
+    --azure:#3B9BF0;
+    --azure-bright:#57B4FF;
+    --brand-deep:#2C7FD6;
+    --ok:#3BC489;
+    --warn:#E0A24C;
+    --crit:#E56B60;
+    --ring:rgba(59,155,240,.34);
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 14px 40px -14px rgba(0,0,0,.55);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  h1,h2,h3{font-family:'Sora', system-ui, sans-serif;font-weight:600;line-height:1.15;text-wrap:balance;margin:0}
+  p{margin:0}
+  .mono{font-family:'IBM Plex Mono', ui-monospace, monospace}
+  .label{font-family:'IBM Plex Mono', monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  section{padding:84px 0;border-top:1px solid var(--line)}
+  @media (max-width:720px){section{padding:56px 0}}
+
+  /* ---- top bar ---- */
+  header{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--paper) 88%, transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-weight:600;font-size:1.02rem;letter-spacing:-.01em}
+  .brand img{width:30px;height:30px;object-fit:contain;display:block}
+  .navlinks{display:flex;gap:28px;font-size:.9rem;color:var(--ink-soft)}
+  .navlinks a{text-decoration:none}
+  .navlinks a:hover{color:var(--azure)}
+  @media (max-width:820px){.navlinks{display:none}}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:600;font-size:.92rem;padding:11px 20px;border-radius:11px;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
+  .btn-primary{background:linear-gradient(135deg,var(--azure),var(--brand-deep));color:#fff;box-shadow:0 8px 20px -8px var(--ring)}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 26px -8px var(--ring)}
+  .btn-ghost{border-color:var(--line);background:var(--surface);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--azure);color:var(--azure)}
+
+  /* ---- hero ---- */
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding-top:72px}
+  @media (max-width:920px){.hero{grid-template-columns:1fr;gap:44px;padding-top:52px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);margin-bottom:24px}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%, transparent)}
+  .hero h1{font-size:clamp(2.1rem,4.6vw,3.2rem);letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;color:var(--azure);position:relative;white-space:nowrap}
+  .hero .lede{margin-top:22px;font-size:1.12rem;color:var(--ink-soft);max-width:34em}
+  .hero-cta{margin-top:32px;display:flex;gap:14px;flex-wrap:wrap}
+  .hero-note{margin-top:18px;font-size:.86rem;color:var(--muted)}
+
+  /* ---- phone mock: replika tampilan aplikasi karyawan ---- */
+  .device-wrap{justify-self:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .device-cap{font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .device{
+    --a-blue:#2563EB;--a-g1:#1D4ED8;--a-g2:#3730A3;--a-bg:#F9FAFB;
+    --a-ink:#1F2937;--a-ink2:#4B5563;--a-g4:#9CA3AF;--a-g5:#6B7280;
+    --a-bd:#F3F4F6;--a-b100:#DBEAFE;--a-b50:#EFF6FF;
+    width:288px;max-width:calc(100vw - 56px);
+    background:#0E1524;border-radius:44px;padding:11px;box-shadow:var(--shadow);
+    font-family:Roboto,'Helvetica Neue',system-ui,Arial,sans-serif;
+  }
+  .screen{background:var(--a-bg);border-radius:34px;overflow:hidden;color:var(--a-ink)}
+  .app-ic{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+  .app-header{display:flex;align-items:center;gap:11px;background:#fff;padding:12px 14px;
+    border-radius:0 0 22px 22px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+  .ah-avatar{width:42px;height:42px;border-radius:50%;background:var(--a-blue);
+    border:2px solid var(--a-b100);display:grid;place-items:center;color:#fff;flex:none}
+  .ah-avatar .app-ic{width:20px;height:20px}
+  .ah-name{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+  .ah-name span{font-size:.58rem;font-weight:700;letter-spacing:.05em;color:var(--a-g5)}
+  .ah-name b{font-size:.86rem;font-weight:700;color:var(--a-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ah-bell{width:34px;height:34px;border-radius:50%;background:var(--a-bg);display:grid;place-items:center;color:var(--a-g4);flex:none}
+  .ah-bell .app-ic{width:16px;height:16px}
+
+  .app-body{padding:14px}
+  .time-card{padding:16px;border-radius:22px;text-align:center;color:#fff;
+    background:linear-gradient(135deg,var(--a-g1),var(--a-g2));box-shadow:0 8px 16px -6px rgba(55,48,163,.4)}
+  .tc-date{font-size:.66rem;font-weight:500;color:#DBEAFE}
+  .tc-time{font-size:2rem;font-weight:800;letter-spacing:-.5px;margin-top:3px;font-variant-numeric:tabular-nums}
+  .tc-loc{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:6px 12px;max-width:100%;
+    border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:.62rem;font-weight:500}
+  .tc-loc .app-ic{width:12px;height:12px;color:#BFDBFE}
+  .tc-loc span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tc-shift{font-size:.62rem;font-weight:500;color:#DBEAFE;margin-top:8px}
+
+  .att-card{margin-top:14px;padding:18px;border-radius:22px;background:#fff;
+    border:1px solid var(--a-bd);box-shadow:0 2px 8px rgba(0,0,0,.03);text-align:center}
+  .att-btn{width:104px;height:104px;margin:0 auto;border-radius:50%;background:var(--a-b50);
+    border:7px solid var(--a-b100);color:var(--a-blue);display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2px}
+  .att-btn .app-ic{width:32px;height:32px}
+  .att-btn span{font-size:.76rem;font-weight:700}
+  .att-inout{display:flex;gap:12px;margin-top:16px}
+  .att-inout>div{flex:1;padding:10px 0;border-radius:14px;background:var(--a-bg);border:1px solid var(--a-bd)}
+  .att-inout span{display:block;font-size:.56rem;font-weight:800;letter-spacing:.09em;color:var(--a-g4)}
+  .att-inout b{display:block;font-size:.95rem;font-weight:700;color:var(--a-ink);margin-top:3px;font-variant-numeric:tabular-nums}
+  .att-cap{margin-top:11px;font-size:.58rem;color:var(--a-g4);line-height:1.45}
+
+  .ss{margin-top:16px}
+  .ss-label{font-size:.6rem;font-weight:700;letter-spacing:.09em;color:var(--a-ink2)}
+  .ss-row{display:flex;gap:6px;margin-top:11px}
+  .ss-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.56rem;font-weight:700;color:var(--a-ink2)}
+  .ss-ic{width:46px;height:46px;border-radius:14px;background:#fff;border:1px solid var(--a-bd);
+    box-shadow:0 2px 4px rgba(0,0,0,.04);display:grid;place-items:center}
+  .ss-ic .app-ic{width:20px;height:20px}
+
+  .app-nav{display:flex;align-items:center;justify-content:space-around;background:#fff;
+    border-radius:22px 22px 0 0;padding:8px 6px 10px;box-shadow:0 -4px 14px rgba(0,0,0,.05)}
+  .nav-i{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.54rem;font-weight:700;color:var(--a-g4);flex:1;min-width:0}
+  .nav-i.on{color:var(--a-blue)}
+  .nav-i .app-ic{width:17px;height:17px}
+  .nav-center{width:52px;height:52px;border-radius:50%;background:var(--a-blue);border:5px solid #fff;
+    color:#fff;display:grid;place-items:center;margin-top:-24px;box-shadow:0 4px 12px rgba(37,99,235,.35);flex:none}
+  .nav-center .app-ic{width:22px;height:22px}
+
+  /* ---- strip ---- */
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  @media (max-width:720px){.strip{grid-template-columns:repeat(2,1fr)}}
+  .strip div{background:var(--surface);padding:22px 20px}
+  .strip b{display:block;font-family:'Sora',sans-serif;font-size:1.35rem;color:var(--azure);letter-spacing:-.01em}
+  .strip p{font-size:.84rem;color:var(--muted);margin-top:4px}
+
+  .sec-head{max-width:40em;margin-bottom:44px}
+  .sec-head h2{font-size:clamp(1.7rem,3vw,2.25rem);letter-spacing:-.02em;margin-top:12px}
+  .sec-head p{margin-top:14px;color:var(--ink-soft);font-size:1.05rem}
+
+  /* ---- feature grid ---- */
+  .features{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+  .f{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);grid-column:span 2}
+  .f.wide{grid-column:span 3}
+  @media (max-width:920px){.features{grid-template-columns:1fr 1fr}.f,.f.wide{grid-column:span 1}}
+  @media (max-width:560px){.features{grid-template-columns:1fr}}
+  .f .ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--azure) 12%, var(--surface));color:var(--azure);margin-bottom:14px}
+  .f h3{font-size:1.06rem;letter-spacing:-.01em}
+  .f p{margin-top:8px;font-size:.92rem;color:var(--ink-soft)}
+  .f .meta{margin-top:14px;font-size:.72rem}
+  .tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.68rem;padding:2px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted);margin-right:6px}
+
+  /* ---- steps ---- */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media (max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{padding:24px;border:1px solid var(--line);border-right:none;position:relative}
+  .step:last-child{border-right:1px solid var(--line)}
+  @media (max-width:820px){.step{border-right:1px solid var(--line);border-bottom:none}.step:last-child{border-bottom:1px solid var(--line)}}
+  .step:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+  .step:last-child{border-radius:0 var(--radius) var(--radius) 0}
+  @media (max-width:820px){.step:first-child{border-radius:var(--radius) var(--radius) 0 0}.step:last-child{border-radius:0 0 var(--radius) var(--radius)}}
+  .step .n{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--azure);font-weight:500}
+  .step .role{font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .step h3{font-size:1rem;margin-top:12px}
+  .step p{margin-top:8px;font-size:.88rem;color:var(--ink-soft)}
+
+  /* ---- roles ---- */
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:820px){.roles{grid-template-columns:1fr}}
+  .role-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .role-card header{position:static;background:var(--surface-2);border:none;border-bottom:1px solid var(--line);padding:16px 20px;display:block;backdrop-filter:none}
+  .role-card header b{font-family:'Sora',sans-serif;font-size:1rem}
+  .role-card header span{display:block;font-size:.78rem;color:var(--muted);margin-top:2px}
+  .role-card ul{margin:0;padding:16px 20px 20px 34px;font-size:.9rem;color:var(--ink-soft)}
+  .role-card li{margin:7px 0}
+
+  /* ---- pricing ---- */
+  .price{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;align-items:start}
+  @media (max-width:820px){.price{grid-template-columns:1fr}}
+  .price-main{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow-sm)}
+  .price-main .big{font-family:'Sora',sans-serif;font-size:1.7rem;letter-spacing:-.02em;margin:6px 0 4px}
+  .price-main .big small{font-size:.9rem;color:var(--muted);font-weight:400}
+  .price-list{margin:18px 0 0;padding:0;list-style:none;font-size:.92rem;color:var(--ink-soft)}
+  .price-list li{padding:9px 0;border-top:1px solid var(--line);display:flex;gap:10px}
+  .price-list li::before{content:"→";color:var(--azure);font-family:'IBM Plex Mono',monospace}
+  .price-side{background:linear-gradient(160deg,color-mix(in srgb,var(--azure) 14%,var(--surface)),var(--surface));border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+  .price-side h3{font-size:1.1rem}
+  .price-side p{margin-top:10px;font-size:.9rem;color:var(--ink-soft)}
+  .price-side .btn{margin-top:20px}
+
+  /* ---- faq ---- */
+  .faq{display:grid;gap:2px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--line)}
+  details{background:var(--surface);padding:0}
+  summary{cursor:pointer;list-style:none;padding:20px 22px;font-family:'Sora',sans-serif;font-weight:600;font-size:1rem;display:flex;justify-content:space-between;gap:16px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary .pm{color:var(--azure);font-family:'IBM Plex Mono',monospace;flex:none;transition:transform .2s}
+  details[open] summary .pm{transform:rotate(45deg)}
+  details p{padding:0 22px 22px;color:var(--ink-soft);font-size:.94rem;max-width:52em}
+
+  /* ---- final cta ---- */
+  .final{background:linear-gradient(135deg,var(--brand-deep),var(--azure));border-radius:22px;padding:52px 40px;text-align:center;color:#fff;box-shadow:var(--shadow)}
+  .final h2{font-size:clamp(1.7rem,3.2vw,2.3rem);color:#fff}
+  .final p{margin:14px auto 0;max-width:34em;color:rgba(255,255,255,.86)}
+  .final .btn{margin-top:28px}
+  .final .btn-primary{background:#fff;color:var(--brand-deep)}
+  .final .code{margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:rgba(255,255,255,.7)}
+
+  footer{padding:40px 0 60px;color:var(--muted);font-size:.86rem}
+  .foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center}
+  .foot-row .brand{font-size:.95rem;color:var(--ink)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="brand"><img src="logo/logo.png" alt="Accuransi">Accuransi Absence</div>
+    <nav class="navlinks">
+      <a href="#fitur">Fitur</a>
+      <a href="#cara">Cara kerja</a>
+      <a href="#peran">Peran</a>
+      <a href="#harga">Harga</a>
+      <a href="#tanya">Tanya jawab</a>
+    </nav>
+    <a class="btn btn-primary" href="https://wa.me/6285722718263?text=Halo%20Accuransi%2C%20saya%20ingin%20menjadwalkan%20demo%20Accuransi%20Absence%20App%20untuk%20perusahaan%20saya." target="_blank" rel="noopener">Minta Demo</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero" style="border-top:none">
+      <div>
+        <span class="eyebrow"><span class="dot"></span><span class="label" style="color:var(--ink-soft)">HRIS Absensi Multi-Perusahaan</span></span>
+        <h1>Absensi yang benar-benar terjadi <em>di lokasi kerja</em>.</h1>
+        <p class="lede">Accuransi Absence App mengunci check-in pada radius kantor, memverifikasinya dengan selfie, lalu merapikan cuti, lembur, shift, dan laporan kehadiran — untuk banyak perusahaan sekaligus.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://wa.me/6285722718263?text=Halo%20Accuransi%2C%20saya%20ingin%20menjadwalkan%20demo%20Accuransi%20Absence%20App%20untuk%20perusahaan%20saya." target="_blank" rel="noopener">Minta Demo</a>
+          <a class="btn btn-ghost" href="#fitur">Lihat fitur</a>
+        </div>
+        <p class="hero-note">Dipakai lewat aplikasi Android &amp; iOS dan browser di HP maupun desktop.</p>
+      </div>
+
+      <div class="device-wrap">
+       <div class="device" aria-hidden="true">
+        <div class="screen">
+          <div class="app-header">
+            <div class="ah-avatar"><svg class="app-ic" viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ah-name"><span id="app-greet">GOOD MORNING,</span><b>Rina Kartika</b></div>
+            <div class="ah-bell"><svg class="app-ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
+          </div>
+          <div class="app-body">
+            <div class="time-card">
+              <div class="tc-date" id="app-date">Monday, 7 September 2026</div>
+              <div class="tc-time" id="clock">10:14:27</div>
+              <div class="tc-loc">
+                <svg class="app-ic" viewBox="0 0 24 24"><path d="m3 11 19-9-9 19-2-8-8-2z"/></svg>
+                <span>Within office range (42 m).</span>
+                <svg class="app-ic" viewBox="0 0 24 24"><path d="M20 10c0 4.4-3.6 8-8 12-4.4-4-8-7.6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="tc-shift">Shift Pagi · 08:00 – 17:00</div>
+            </div>
+
+            <div class="att-card">
+              <div class="att-btn">
+                <svg class="app-ic" viewBox="0 0 24 24"><path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .13-5.35 0-6"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></svg>
+                <span>Clock In</span>
+              </div>
+              <div class="att-inout">
+                <div><span>IN</span><b>--:--</b></div>
+                <div><span>OUT</span><b>--:--</b></div>
+              </div>
+              <p class="att-cap">Use the camera for a selfie. Make sure you are within the office area.</p>
+            </div>
+
+            <div class="ss">
+              <div class="ss-label">SELF SERVICE</div>
+              <div class="ss-row">
+                <div class="ss-item"><div class="ss-ic" style="color:#F97316"><svg class="app-ic" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div>Leave</div>
+                <div class="ss-item"><div class="ss-ic" style="color:#2563EB"><svg class="app-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>Overtime</div>
+                <div class="ss-item"><div class="ss-ic" style="color:#16A34A"><svg class="app-ic" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></div>Reimburse</div>
+                <div class="ss-item"><div class="ss-ic" style="color:#9333EA"><svg class="app-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></div>View All</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-nav">
+            <div class="nav-i on"><svg class="app-ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Home</span></div>
+            <div class="nav-i"><svg class="app-ic" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg><span>History</span></div>
+            <div class="nav-center"><svg class="app-ic" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18"/><path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="m16 20 2 2 4-4"/></svg></div>
+            <div class="nav-i"><svg class="app-ic" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><span>Messages</span></div>
+            <div class="nav-i"><svg class="app-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M18 20a6 6 0 0 0-12 0"/></svg><span>Profile</span></div>
+          </div>
+        </div>
+       </div>
+       <p class="device-cap">Contoh tampilan aplikasi karyawan</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section>
+      <div class="strip">
+        <div><b>3 peran</b><p>Superadmin, Admin Perusahaan, Karyawan — satu halaman login</p></div>
+        <div><b>Geofencing</b><p>Radius meter yang kamu tentukan lewat titik di peta</p></div>
+        <div><b>Import Excel</b><p>Tambah karyawan dan susun jadwal secara massal</p></div>
+        <div><b>Real-time</b><p>Notifikasi &amp; support chat langsung antar peran</p></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section id="fitur">
+      <div class="sec-head">
+        <span class="label">Fitur</span>
+        <h2>Semua yang dibutuhkan HR untuk berhenti mengejar absensi manual.</h2>
+        <p>Dari titik check-in sampai invoice bulanan — dikerjakan di satu sistem, bukan tersebar di grup chat dan spreadsheet.</p>
+      </div>
+      <div class="features">
+        <div class="f wide">
+          <div class="ico">◎</div>
+          <h3>Check-in geofenced + selfie</h3>
+          <p>Karyawan hanya bisa Clock In saat berada dalam radius kantor. Sistem meminta foto selfie untuk verifikasi, sehingga titip absen tidak mungkin. Di luar radius, aplikasi menolak dengan pesan &ldquo;Lokasi terlalu jauh&rdquo;.</p>
+          <div class="meta"><span class="tag">GPS</span><span class="tag">Radius</span><span class="tag">Face recognition</span></div>
+        </div>
+        <div class="f wide">
+          <div class="ico">▦</div>
+          <h3>Jadwal &amp; shift</h3>
+          <p>Grid bulanan karyawan &times; tanggal. Buat shift (Pagi, Sore, Malam), lakukan bulk assignment untuk banyak karyawan sekaligus, atau impor seluruh jadwal dari template Excel.</p>
+          <div class="meta"><span class="tag">Bulk assign</span><span class="tag">Import Excel</span></div>
+        </div>
+        <div class="f">
+          <div class="ico">✎</div>
+          <h3>Cuti, lembur &amp; reimbursement</h3>
+          <p>Diajukan langsung dari HP dengan lampiran. Saldo cuti tahunan dihitung otomatis dari tanggal kontrak.</p>
+        </div>
+        <div class="f">
+          <div class="ico">⇅</div>
+          <h3>Approval berjenjang</h3>
+          <p>Perubahan jadwal lewat supervisor dulu, lalu admin. Jadwal ter-update otomatis saat disetujui.</p>
+        </div>
+        <div class="f">
+          <div class="ico">▤</div>
+          <h3>Laporan kehadiran &amp; cuti</h3>
+          <p>Rekap per periode dan per departemen, log kehadiran per hari, export ke <span class="mono">.xlsx</span>.</p>
+        </div>
+        <div class="f">
+          <div class="ico">◫</div>
+          <h3>Multi-perusahaan (SaaS)</h3>
+          <p>Superadmin mengelola banyak perusahaan, kuota karyawan, dan invoice — dihitung otomatis dan diunduh sebagai PDF.</p>
+        </div>
+        <div class="f">
+          <div class="ico">✦</div>
+          <h3>Setup geofencing mandiri</h3>
+          <p>Admin memilih titik kantor di peta dan mengatur radius sendiri. Cocok untuk banyak cabang.</p>
+        </div>
+        <div class="f">
+          <div class="ico">✉</div>
+          <h3>Support chat</h3>
+          <p>Admin perusahaan chat langsung dengan tim Accuransi untuk pertanyaan teknis atau billing.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section id="cara">
+      <div class="sec-head">
+        <span class="label">Cara kerja</span>
+        <h2>Dari perusahaan baru sampai karyawan Clock In pertama.</h2>
+        <p>Empat langkah onboarding yang berurutan — masing-masing dipegang peran yang berbeda.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="n">01</div>
+          <div class="role">Superadmin</div>
+          <h3>Daftarkan perusahaan</h3>
+          <p>Buat perusahaan baru dengan kuota karyawan, harga per karyawan, dan masa langganan. Akun admin perusahaan dibuat otomatis.</p>
+        </div>
+        <div class="step">
+          <div class="n">02</div>
+          <div class="role">Admin perusahaan</div>
+          <h3>Atur kantor &amp; data master</h3>
+          <p>Tandai lokasi kantor di peta dan tentukan radius. Isi departemen, jabatan, level, status, lalu buat shift kerja.</p>
+        </div>
+        <div class="step">
+          <div class="n">03</div>
+          <div class="role">Admin perusahaan</div>
+          <h3>Tambah karyawan &amp; jadwal</h3>
+          <p>Input manual atau impor dari Excel. Susun jadwal bulan berjalan dengan bulk assignment.</p>
+        </div>
+        <div class="step">
+          <div class="n">04</div>
+          <div class="role">Karyawan</div>
+          <h3>Login &amp; mulai absensi</h3>
+          <p>Buka aplikasi di HP, izinkan lokasi, Clock In dengan selfie, dan ajukan cuti atau lembur saat dibutuhkan.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section id="peran">
+      <div class="sec-head">
+        <span class="label">Peran &amp; akses</span>
+        <h2>Satu login, tiga dashboard.</h2>
+        <p>Sistem mengarahkan setiap pengguna ke tampilan yang sesuai perannya — tanpa aplikasi terpisah.</p>
+      </div>
+      <div class="roles">
+        <div class="role-card">
+          <header><b>Superadmin</b><span>Operator SaaS · seluruh platform</span></header>
+          <ul>
+            <li>Kelola semua perusahaan &amp; kuota</li>
+            <li>Buat invoice + preview &amp; PDF</li>
+            <li>Atur branding (nama &amp; logo aplikasi)</li>
+            <li>Support chat dengan admin perusahaan</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <header><b>Admin Perusahaan</b><span>Satu perusahaan · data internal</span></header>
+          <ul>
+            <li>Kelola karyawan, jabatan &amp; peran</li>
+            <li>Atur lokasi kantor &amp; shift</li>
+            <li>Proses approval cuti, lembur, jadwal</li>
+            <li>Laporan kehadiran &amp; export Excel</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <header><b>Karyawan</b><span>Data pribadi · tampilan mobile</span></header>
+          <ul>
+            <li>Clock In / Clock Out dengan GPS</li>
+            <li>Lihat jadwal shift &amp; riwayat absensi</li>
+            <li>Ajukan cuti, lembur, reimbursement</li>
+            <li>Cek saldo cuti &amp; kelola profil</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section id="harga">
+      <div class="sec-head">
+        <span class="label">Harga</span>
+        <h2>Bayar per karyawan, ditagih per perusahaan.</h2>
+        <p>Model langganan sederhana yang ikut ukuran tim kamu.</p>
+      </div>
+      <div class="price">
+        <div class="price-main">
+          <span class="label">Langganan SaaS</span>
+          <div class="big">Per karyawan / bulan <small>&mdash; sesuai kuota perusahaan</small></div>
+          <p style="color:var(--ink-soft);font-size:.95rem">Tagihan dihitung otomatis: jumlah karyawan &times; harga per karyawan, dengan masa langganan yang bisa diperpanjang kapan saja.</p>
+          <ul class="price-list">
+            <li>Kuota karyawan fleksibel per perusahaan</li>
+            <li>Invoice otomatis, bisa di-preview dan diunduh PDF</li>
+            <li>Multi-cabang dalam satu perusahaan tanpa biaya tambahan</li>
+            <li>Aplikasi Android, iOS, dan web sudah termasuk</li>
+          </ul>
+        </div>
+        <div class="price-side">
+          <h3>Mulai dengan demo</h3>
+          <p>Kami bantu siapkan satu perusahaan percobaan, atur geofencing kantor kamu, dan tunjukkan alur absensi end-to-end. Harga per karyawan menyesuaikan jumlah tim.</p>
+          <a class="btn btn-primary" href="https://wa.me/6285722718263?text=Halo%20Accuransi%2C%20saya%20ingin%20menjadwalkan%20demo%20Accuransi%20Absence%20App%20untuk%20perusahaan%20saya." target="_blank" rel="noopener">Minta Demo</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section id="tanya">
+      <div class="sec-head">
+        <span class="label">Tanya jawab</span>
+        <h2>Pertanyaan yang paling sering muncul.</h2>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>Bisakah karyawan titip absen dari rumah?<span class="pm">+</span></summary>
+          <p>Tidak. Check-in hanya diterima jika perangkat berada di dalam radius kantor yang ditentukan admin, dan sistem meminta foto selfie sebagai verifikasi. Perusahaan juga dapat mengaktifkan pendaftaran wajah (face recognition) untuk lapisan tambahan.</p>
+        </details>
+        <details>
+          <summary>Bagaimana kalau karyawan bertugas di luar kantor?<span class="pm">+</span></summary>
+          <p>Admin bisa mengatur beberapa titik lokasi atau menyesuaikan radius per cabang. Bila di luar area yang diizinkan, aplikasi menampilkan pesan &ldquo;Lokasi terlalu jauh&rdquo; dan mencatat kondisi tersebut.</p>
+        </details>
+        <details>
+          <summary>Platform apa saja yang didukung?<span class="pm">+</span></summary>
+          <p>Aplikasi karyawan tersedia untuk Android dan iOS, serta lewat browser di HP maupun desktop. Dashboard admin dan superadmin berjalan di browser.</p>
+        </details>
+        <details>
+          <summary>Apakah butuh koneksi internet?<span class="pm">+</span></summary>
+          <p>Ya. Aplikasi memerlukan internet untuk memuat peta geofencing, mengirim foto verifikasi, dan menyinkronkan data absensi secara real-time.</p>
+        </details>
+        <details>
+          <summary>Bagaimana saldo cuti dihitung?<span class="pm">+</span></summary>
+          <p>Standarnya 12 hari per tahun, dihitung sejak tanggal mulai kontrak karyawan. Hanya cuti berstatus &ldquo;Disetujui&rdquo; yang mengurangi saldo; pengajuan yang menunggu atau ditolak tidak berpengaruh.</p>
+        </details>
+        <details>
+          <summary>Bisakah satu akun mengelola banyak perusahaan?<span class="pm">+</span></summary>
+          <p>Ya. Peran Superadmin mengelola seluruh perusahaan di platform, termasuk billing dan branding, sementara setiap Admin Perusahaan hanya melihat datanya sendiri.</p>
+        </details>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section style="border-top:none">
+      <div class="final">
+        <h2>Siap pindah dari absensi manual?</h2>
+        <p>Lihat bagaimana Accuransi Absence App menutup celah titip absen dan merapikan seluruh administrasi kehadiran timmu.</p>
+        <a class="btn btn-primary" href="https://wa.me/6285722718263?text=Halo%20Accuransi%2C%20saya%20ingin%20menjadwalkan%20demo%20Accuransi%20Absence%20App%20untuk%20perusahaan%20saya." target="_blank" rel="noopener">Minta Demo via WhatsApp</a>
+        <div class="code">WhatsApp +62 857-2271-8263 &nbsp;·&nbsp; absence.xenoshms.com</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="brand"><img src="logo/logo.png" alt="" style="width:22px;height:22px;object-fit:contain">Accuransi Absence App</div>
+    <div>Platform HRIS absensi berbasis SaaS · multi-perusahaan · Android, iOS &amp; web<br>Demo &amp; info: <a href="https://wa.me/6285722718263?text=Halo%20Accuransi%2C%20saya%20ingin%20menjadwalkan%20demo%20Accuransi%20Absence%20App%20untuk%20perusahaan%20saya." target="_blank" rel="noopener" style="color:var(--azure);text-decoration:none">WhatsApp +62 857-2271-8263</a></div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var clock = document.getElementById('clock');
+    var dateEl = document.getElementById('app-date');
+    var greetEl = document.getElementById('app-greet');
+    if(!clock) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function pad(n){return (n<10?'0':'')+n;}
+    function greet(h){
+      if(h>=12 && h<18) return 'GOOD AFTERNOON,';
+      if(h>=18 || h<5) return 'GOOD EVENING,';
+      return 'GOOD MORNING,';
+    }
+    function tick(){
+      var d = new Date();
+      clock.textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+      if(dateEl) dateEl.textContent = days[d.getDay()]+', '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+      if(greetEl) greetEl.textContent = greet(d.getHours());
+    }
+    tick();
+    if(!reduce) setInterval(tick, 1000);
+  })();
+</script>
+</body>
+</html>
